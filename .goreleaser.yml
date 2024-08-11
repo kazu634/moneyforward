@@ -1,0 +1,77 @@
+env:
+  - CGO_ENABLED=0
+
+before:
+  hooks:
+    # you may remove this if you don't use vgo
+    - sudo apt install rpm
+    - go mod download
+
+builds:
+  -
+    flags:
+      - -trimpath
+    goos:
+      - linux
+      - windows
+    goarch:
+      - amd64
+
+archives:
+  -
+    format: zip
+
+snapshot:
+  name_template: "{{ .Tag }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
+
+nfpms:
+  -
+    file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+
+    # Default is empty.
+    vendor: Kazuhiro MUSASHI
+
+    # Your app's homepage.
+    # Default is empty.
+    #homepage: https://example.com/
+
+    # Your app's maintainer (probably you).
+    # Default is empty.
+    maintainer: Kazuhiro Musashi <simoom634@yahoo.co.jp>
+
+    # Formats to be generated:
+    formats:
+      - deb
+      - rpm
+
+release:
+  gitea:
+    owner: kazu634
+    name: moneyforward
+
+  disable: false
+
+gitea_urls:
+  api: https://gitea.kazu634.com/api/v1/
+  download: https://gitea.kazu634.com
+
+dockers:
+  -
+    image_templates:
+    - reg.kazu634.com/kazu634/{{ .ProjectName }}:{{ .Tag }}
+    - reg.kazu634.com/kazu634/{{ .ProjectName }}:latest
+
+    goos: linux
+    goarch: amd64
+
+    dockerfile: Dockerfile
+
+    push_flags:
+    - --tls-verify=false

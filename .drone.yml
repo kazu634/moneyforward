@@ -1,0 +1,35 @@
+kind: pipeline
+name: default
+
+steps:
+  - name: fetch
+    image: docker:git
+    commands:
+      - git fetch --tags
+
+  - name: build
+    image: cimg/go
+
+    volumes:
+    - name: dockersock
+      path: /var/run/docker.sock
+
+    environment:
+      GITEA_TOKEN:
+        from_secret: gitea_token
+
+    commands:
+      - sudo chmod 666 /var/run/docker.sock
+      - curl -sL https://git.io/goreleaser -o /tmp/goreleaser-download
+      - chmod +x /tmp/goreleaser-download
+      - sudo chown -R circleci:circleci .
+      - /tmp/goreleaser-download release --rm-dist
+
+trigger:
+  event:
+    - tag
+
+volumes:
+- name: dockersock
+  host:
+    path: /var/run/docker.sock
