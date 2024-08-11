@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM cimg/go:1.22.6-browsers
 
 RUN apk add --no-cache libc6-compat tzdata && \
     cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
