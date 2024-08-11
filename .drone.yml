@@ -8,7 +8,7 @@ steps:
       - git fetch --tags
 
   - name: build
-    image: cimg/go
+    image: cimg/go:1.22.6
 
     volumes:
     - name: dockersock
