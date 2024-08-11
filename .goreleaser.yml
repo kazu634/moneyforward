@@ -1,15 +1,16 @@
-env:
-  - CGO_ENABLED=0
+version: 2
 
 before:
   hooks:
-    # you may remove this if you don't use vgo
     - sudo apt update
     - sudo apt install rpm
+    - go mod tidy
     - go mod download
+    - go generate ./...
 
 builds:
-  -
+  - env:
+      - CGO_ENABLED=0
     flags:
       - -trimpath
     goos:
@@ -19,18 +20,7 @@ builds:
       - amd64
 
 archives:
-  -
-    format: zip
-
-snapshot:
-  name_template: "{{ .Tag }}-next"
-
-changelog:
-  sort: asc
-  filters:
-    exclude:
-    - '^docs:'
-    - '^test:'
+  - format: zip
 
 nfpms:
   -
@@ -41,7 +31,7 @@ nfpms:
 
     # Your app's homepage.
     # Default is empty.
-    #homepage: https://example.com/
+    homepage: https://blog.kazu634.com/
 
     # Your app's maintainer (probably you).
     # Default is empty.
@@ -58,21 +48,33 @@ release:
     name: moneyforward
 
   disable: false
+  mode: append
 
 gitea_urls:
   api: https://gitea.kazu634.com/api/v1/
   download: https://gitea.kazu634.com
 
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+  use: gitea
+
 dockers:
   -
     image_templates:
-    - reg.kazu634.com/kazu634/{{ .ProjectName }}:{{ .Tag }}
-    - reg.kazu634.com/kazu634/{{ .ProjectName }}:latest
+      - reg.kazu634.com/kazu634/{{ .ProjectName }}:{{ .Tag }}
+      - reg.kazu634.com/kazu634/{{ .ProjectName }}:latest
 
     goos: linux
     goarch: amd64
 
     dockerfile: Dockerfile
 
+    skip_push: false
+    skip_build: false
+
     push_flags:
-    - --tls-verify=false
+      - --tls-verify=false
