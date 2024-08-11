@@ -6,4 +6,4 @@ RUN apk add --no-cache libc6-compat tzdata && \
 
 ADD ./moneyforward /usr/local/bin/moneyforward
 
-CMD ["/usr/local/bin/moneyforward"]
+ENTRYPOINT ["/usr/local/bin/moneyforward"]
