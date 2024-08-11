@@ -21,7 +21,7 @@ steps:
     commands:
       - sudo chmod 666 /var/run/docker.sock
       - sudo chown -R circleci:circleci .
-      - curl -sfL https://goreleaser.com/static/run | bash -s -- check
+      - curl -sfL https://goreleaser.com/static/run | bash -s -- release --clean
 
 trigger:
   event:
