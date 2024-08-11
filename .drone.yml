@@ -23,7 +23,7 @@ steps:
       - curl -sL https://git.io/goreleaser -o /tmp/goreleaser-download
       - chmod +x /tmp/goreleaser-download
       - sudo chown -R circleci:circleci .
-      - /tmp/goreleaser-download release --rm-dist
+      - /tmp/goreleaser-download release --clean
 
 trigger:
   event:
