@@ -60,7 +60,6 @@ changelog:
     exclude:
       - "^docs:"
       - "^test:"
-  use: gitea
 
 dockers:
   -
@@ -74,7 +73,6 @@ dockers:
     dockerfile: Dockerfile
 
     skip_push: false
-    skip_build: false
 
     push_flags:
       - --tls-verify=false
